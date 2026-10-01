@@ -1,4 +1,5 @@
 import axios from "axios";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Header } from "./Header";
 import { SignupPage } from "./SignupPage";
 import { LoginPage } from "./LoginPage";
@@ -12,14 +13,17 @@ axios.defaults.withCredentials = true;
 
 function App() {
   return (
-    <div>
+    <BrowserRouter>
       <Header />
-      <SignupPage />
-      <LoginPage />
-      <PostsPage />
+      {/* One route renders at a time, chosen by the current URL. */}
+      <Routes>
+        <Route path="/" element={<PostsPage />} />
+        <Route path="/signup" element={<SignupPage />} />
+        <Route path="/login" element={<LoginPage />} />
+      </Routes>
       <Footer />
-    </div>
-  )
+    </BrowserRouter>
+  );
 }
 
 export default App;
