@@ -6,7 +6,7 @@ type Props = {
 export function PostsIndex({ posts, onShow }: Props) {
   return (
     <div>
-      <h1>All photos ({posts.length} total)</h1>
+      <h1>All posts ({posts.length} total)</h1>
       <div>
         {posts.map((post) => (
           <div key={post.id}>
