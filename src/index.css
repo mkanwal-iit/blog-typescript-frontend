@@ -31,10 +31,10 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #14130f;
-    --bg-tint: #1c1a15;
-    --surface: #1e1c17;
-    --border: #35322a;
+    --bg: #110f0c;
+    --bg-tint: #1a1713;
+    --surface: #221f1a;
+    --border: #3a362d;
     --text: #f4f1ea;
     --text-muted: #a9a298;
     --accent: #e08a62;
@@ -55,24 +55,42 @@ body {
   margin: 0;
   min-height: 100vh;
   color: var(--text);
-
-  /* Layered background: two soft radial washes over a warm base, plus a faint
-     grain so large empty areas do not read as flat. */
   background-color: var(--bg);
+}
+
+/* The reading column is deliberately narrow, which leaves wide margins on a
+   large screen. This fixed layer fills them: two accent washes anchored to the
+   left and right edges, a vertical tint, and a faint dot grid for texture.
+   It is fixed and behind everything, so it stays put while the page scrolls. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
   background-image:
     radial-gradient(
-      ellipse 80% 50% at 15% -10%,
-      color-mix(in srgb, var(--accent) 9%, transparent),
-      transparent 70%
+      ellipse 45% 55% at 0% 15%,
+      color-mix(in srgb, var(--accent) 14%, transparent),
+      transparent 65%
     ),
     radial-gradient(
-      ellipse 60% 45% at 95% 5%,
-      color-mix(in srgb, var(--accent) 6%, transparent),
-      transparent 70%
+      ellipse 45% 55% at 100% 70%,
+      color-mix(in srgb, var(--accent-soft, var(--accent)) 11%, transparent),
+      transparent 65%
     ),
-    linear-gradient(var(--bg-tint), var(--bg) 420px);
-  background-repeat: no-repeat;
-  background-attachment: fixed;
+    radial-gradient(
+      circle at 1px 1px,
+      color-mix(in srgb, var(--text) 9%, transparent) 1px,
+      transparent 0
+    ),
+    linear-gradient(
+      165deg,
+      var(--bg-tint),
+      var(--bg) 45%,
+      color-mix(in srgb, var(--accent) 4%, var(--bg))
+    );
+  background-size: 100% 100%, 100% 100%, 22px 22px, 100% 100%;
 }
 
 /* Header ----------------------------------------------------------------- */
@@ -129,6 +147,43 @@ main,
   max-width: 720px;
   margin: 0 auto;
   padding: 3.5rem 1.5rem 5rem;
+  position: relative;
+}
+
+/* Hairline rules marking the edges of the reading column, so the wide margins
+   read as deliberate space rather than emptiness. They fade out at both ends
+   and are hidden below 900px, where there are no margins to delimit. */
+@media (min-width: 900px) {
+  main::before,
+  main::after,
+  #signup::before,
+  #signup::after,
+  #login::before,
+  #login::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: linear-gradient(
+      var(--border) 0%,
+      var(--border) 60%,
+      transparent 100%
+    );
+    opacity: 0.55;
+  }
+
+  main::before,
+  #signup::before,
+  #login::before {
+    left: 0;
+  }
+
+  main::after,
+  #signup::after,
+  #login::after {
+    right: 0;
+  }
 }
 
 h1 {
